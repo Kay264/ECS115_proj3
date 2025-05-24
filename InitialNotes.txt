@@ -1,0 +1,26 @@
+Project 3 - Group 11
+Kalon Moco + Lexi Allyson Sario
+
+Due Friday June 6 2025 at 11:00PM
+
+TO-DO
+- web scraping using BeautifulSoup library
+- research BeautifulSoup
+- research TechCrunch
+
+CODE TASKS
+- web scrape the website
+- successful connection using requests (use screenshot)
+- make a beautiful soup and fetch corresponding data
+- plot diagrams using matplotlib
+- answer below:
+1. What are the latest article titles on TechCrunch?
+2. Who are the authors of these articles?
+3. What are the publication dates?
+4. Plot the number of articles is written by each author on the homepage?
+5. Plot the distribution of article publication hours over a 24-hour period?
+6. Plot the number of articles published each day over the course of one week?
+
+DOCUMENTATION
+- PDF
+- Python file
