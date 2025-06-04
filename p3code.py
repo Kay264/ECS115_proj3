@@ -20,22 +20,12 @@ for article in articles: # loops through each article
     if (author != None):
         author_list.append(author.text)
 
-    # scan through hours (specifically the number)
-    # for each entry, if that number is less than the last one its called "latest entry"
-    if date != None:
-        latest = date.text.strip()[:2]
-        if(date.text.strip()[:2]) > latest:
-            break
-
     # gets rid of loop-cards that are not articles
-    if (author != None and date != None and "hours" in date.text): 
+    if (author != None and date != None): 
         print(title.text)
         print(author.text)
         print(date.text.strip())
 
-        '''for char in date.text:
-            if char.isdigit():
-                print(int(char))'''
         print()
 
 # 4. Plot the number of articles is written by each author on the homepage?
