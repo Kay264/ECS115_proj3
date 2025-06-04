@@ -2,13 +2,13 @@ from bs4 import BeautifulSoup
 import requests
 import datetime
 
-url = "https://techcrunch.com/"
+url = "https://techcrunch.com/latest/"
 page = requests.get(url)
 soup = BeautifulSoup(page.text, "html.parser")
 
 print("Connection Check:", page) # checks if connection is successful
 
-articles = soup.find_all("li", class_="wp-block-post") 
+articles = soup.find_all("div", class_="loop-card__content") 
 author_list = []
 author_dict = {}
 
@@ -20,11 +20,22 @@ for article in articles: # loops through each article
     if (author != None):
         author_list.append(author.text)
 
+    # scan through hours (specifically the number)
+    # for each entry, if that number is less than the last one its called "latest entry"
+    if date != None:
+        latest = date.text.strip()[:2]
+        if(date.text.strip()[:2]) > latest:
+            break
+
     # gets rid of loop-cards that are not articles
-    if (author != None and date != None): 
+    if (author != None and date != None and "hours" in date.text): 
         print(title.text)
         print(author.text)
         print(date.text.strip())
+
+        '''for char in date.text:
+            if char.isdigit():
+                print(int(char))'''
         print()
 
 # 4. Plot the number of articles is written by each author on the homepage?
@@ -34,6 +45,7 @@ for author in author_list:
     else:
         author_dict[author] = 1
 
+'''
 # 5. Plot the distribution of article publication hours over a 24-hour period?
 # 6. Plot the number of articles published each day over the course of one week?
 datetime_list = []
@@ -73,6 +85,7 @@ for dt in datetime_list:
     # figure out code regarding months days and days of the week
 
 print(datetime_dict)
+'''
 
 '''
 logic notes
