@@ -12,6 +12,10 @@ articles = soup.find_all("div", class_="loop-card__content")
 author_list = []
 author_dict = {}
 
+# Questions 1-3
+# 1. What are the latest article titles on TechCrunch?
+# 2. Who are the authors of these articles?
+# 3. What are the publication dates?
 for article in articles: # loops through each article
     title = article.find("a", class_="loop-card__title-link")
     author = article.find("a", class_="loop-card__author")
@@ -20,7 +24,7 @@ for article in articles: # loops through each article
     if (author != None):
         author_list.append(author.text)
 
-    # gets rid of loop-cards that are not articles
+    # gets rid of loop-cards that are not articles just in case
     if (author != None and date != None): 
         print(title.text)
         print(author.text)
