@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
-import datetime
+import matplotlib.pyplot as plt
+from datetime import datetime
 
 url = "https://techcrunch.com/latest/"
 page = requests.get(url)
@@ -8,9 +9,10 @@ soup = BeautifulSoup(page.text, "html.parser")
 
 print("Connection Check:", page) # checks if connection is successful
 
-articles = soup.find_all("div", class_="loop-card__content") 
-author_list = []
-author_dict = {}
+articles = soup.find_all("div", class_="loop-card__content") # goes through divs containing article
+
+author_list = [] # list of authors to count
+author_dict = {} # dictionary of authors for bar graph
 
 # Questions 1-3
 # 1. What are the latest article titles on TechCrunch?
@@ -21,81 +23,70 @@ for article in articles: # loops through each article
     author = article.find("a", class_="loop-card__author")
     date = article.find("time", class_="loop-card__time")
  
-    if (author != None):
+    if (author != None): # adds to list of authors
         author_list.append(author.text)
 
-    # gets rid of loop-cards that are not articles just in case
+    # gets rid of loop-cards that are not articles
     if (author != None and date != None): 
+
+        # prints latest article titles, authors, and dates
         print(title.text)
         print(author.text)
         print(date.text.strip())
+        print(date.get('datetime'))
 
         print()
 
 # 4. Plot the number of articles is written by each author on the homepage?
-for author in author_list:
-    if author in author_dict:
-        author_dict[author] += 1
-    else:
-        author_dict[author] = 1
+for author in author_list: # go through list of authors
+    if author in author_dict: # if author already exists
+        author_dict[author] += 1 # add 1
+    else: # if author doesn't exist
+        author_dict[author] = 1 # make it, start with 1
 
-'''
+# Bar graph of authors
+plt.bar(range(len(author_dict)), list(author_dict.values()), align='center')
+plt.xticks(range(len(author_dict)), list(author_dict.keys()))
+plt.show()      
+
 # 5. Plot the distribution of article publication hours over a 24-hour period?
+hour_list = [] # list of hours to count
+hour_dict = {} # dictionary of hours for bar graph
+
 # 6. Plot the number of articles published each day over the course of one week?
-datetime_list = []
-datetime_dict = {}
+date_list = [] # list of dates to count
+date_dict = {} # dictionary of dates for bar graph
 
-for article in soup.find_all("time"):
-    if article.has_attr("datetime"):
-        datetime_list.append(article["datetime"])
+# list of weekdays, each is associated with an integer
+weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] 
 
-hour = 0
-month = 0
-day = 0
-        
-for dt in datetime_list:
-   
-    if hour < 10:
-        hourstr = "T0" + str(hour) + ":"
-    elif (25 > hour > 9):
-        hourstr = "T" + str(hour) + ":"
+for article in soup.find_all("time"): # getting all times on page
+    if article.has_attr("datetime"): # if datetime exists
+        date = article["datetime"] # string of datetime link
+        date_obj = datetime.strptime(date[:10], "%Y-%m-%d") # ONLY gets the date
+        hour_obj = date[11:13] # ONLY gets the hour
 
-    if month < 10:
-        monthstr = "-0" + str(month) + "-"
-    elif (9 < month < 32):
-        monthstr = "-" + str(month) + "-"
+        hour_list.append(hour_obj) # add to list of hours
+        date_list.append(weekdays[date_obj.weekday()]) # add to list
 
-    if day < 10:
-        daystr = "-0" + str(day) + "T"
-    elif (9 < month < 32):
-        daystr = "-" + str(day) + "T"
+for hour in hour_list: # go through list of hours
+    if hour in hour_list: # if hour already exists
+        hour_dict[hour] += 1 # add 1
+    else: # if it doesn't exist
+        hour_dict[hour] = 1 # make it, start with 1
 
-    if hourstr in dt:
-        datetime_dict[hour] += 1
-    elif (25 > hour):
-        datetime_dict[hour] = 1
-        hour += 1
+# Bar graph of how many articles are published per hour
+plt.bar(range(len(hour_dict)), list(hour_dict.values()), align='center')
+plt.xticks(range(len(hour_dict)), list(hour_dict.keys()))
+plt.show()
 
-    # figure out code regarding months days and days of the week
+for dt in date_list: # go through list of weekdays
+    if dt in date_list: # if weekday already exists
+        date_dict[dt] += 1 # add 1
+    else: # if it doesn't exist
+        date_dict[dt] = 1 # make it, start with one
 
-print(datetime_dict)
-'''
-
-'''
-logic notes
-4. Plot the number of articles is written by each author on the homepage?
-- use dictionary to keep count of authors
-- plot
-
-5. Plot the distribution of article publication hours over a 24-hour period?
-- figure out how to get code of 24 hour period
-- use datetime???
-- use a counter
-- plot
-
-6. Plot the number of articles published each day over the course of one week?
-- use same code above
-- separate by days of week
-- use a counter per day
-- plot
-'''
+# Bar graph of how many articles are published per weekday
+plt.bar(range(len(date_dict)), list(date_dict.values()), align='center')
+plt.xticks(range(len(date_dict)), list(date_dict.keys()))
+plt.show()
