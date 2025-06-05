@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
-import requests
-import matplotlib.pyplot as plt
 from datetime import datetime
 from collections import defaultdict 
+import matplotlib.pyplot as plt
+import requests
 
 url = "https://techcrunch.com/" # used https://techcrunch.com/latest for prob #1-3
 page = requests.get(url)
