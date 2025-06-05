@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import matplotlib.pyplot as plt
 from datetime import datetime
+from collections import defaultdict 
 
 url = "https://techcrunch.com/" # used https://techcrunch.com/latest for prob #1-3
 page = requests.get(url)
@@ -14,10 +15,10 @@ author_list = [] # list of authors to count
 author_dict = {} # dictionary of authors for bar graph
 
 hour_list = [] # list of hours to count
-hour_dict = {} # dictionary of hours for bar graph
+hour_dict = defaultdict(int) # dictionary of hours for bar graph
 
 date_list = [] # list of dates to count
-date_dict = {} # dictionary of dates for bar graph
+date_dict = defaultdict(int) # dictionary of dates for bar graph
 # list of weekdays, each is associated with an integer
 weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] 
 
@@ -36,7 +37,7 @@ for article in articles: # loops through each article
 
         datetime_str = date.get('datetime') # string of datetime link
         date_obj = datetime.strptime(datetime_str[:10], "%Y-%m-%d") # ONLY gets the date
-        hour_obj = datetime_str[11:13] # ONLY gets the hour
+        hour_obj = datetime_str[11:14] # ONLY gets the hour
 
         author_list.append(author.text) # add to list of authors
         hour_list.append(hour_obj) # add to list of hours
@@ -59,8 +60,8 @@ for author in author_list: # go through list of authors
         author_dict[author] = 1 # make it, start with 1
 
 # Bar graph of authors
-plt.bar(range(len(author_dict)), list(author_dict.values()), align='center')
-plt.xticks(range(len(author_dict)), list(author_dict.keys()))
+plt.barh(range(len(author_dict)), list(author_dict.values()), align='center')
+plt.yticks(range(len(author_dict)), list(author_dict.keys()), fontsize=8)
 plt.show()      
 
 
